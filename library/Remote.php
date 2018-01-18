@@ -4,6 +4,7 @@
 // +----------------------------------------------------------------------
 // | Author: qh.cao
 // +----------------------------------------------------------------------
+use Yaf\Registry;
 use Service\RpcClient;
 use App\Exceptions\RemoteException;
 
@@ -19,7 +20,14 @@ class Remote
                 self::$instance->setConfig(Config::get('server/client'));
             }
             $data = json_encode([
-                'url' => $url,
+                'auth'   => [
+                    'appKey'    => Registry::get('config')->get('application.key'),
+                    'appSecret' => Helper::hash([
+                        'url'    => $url,
+                        'params' => $params,
+                    ])
+                ],
+                'url'    => $url,
                 'params' => $params,
             ]);
             $result = self::$instance->exec($data);
