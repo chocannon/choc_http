@@ -8,4 +8,6 @@
 return [
     ['GET', '/user/{id:\d+}[/{name}]', '/index/index'],
     ['GET', '/test', '/index/test'],
+    ['POST', '/index', '/index/index'],
+    ['PUT', '/index', '/index/index']
 ];

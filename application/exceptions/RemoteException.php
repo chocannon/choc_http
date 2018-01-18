@@ -6,7 +6,9 @@
 // +----------------------------------------------------------------------
 namespace App\Exceptions;
 
+use Code;
+
 class RemoteException extends \Exception 
 {
-    protected $code = 501;
+    protected $code = Code::REMOTE_ERROR;
 }

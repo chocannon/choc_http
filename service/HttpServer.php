@@ -6,9 +6,12 @@
 // +----------------------------------------------------------------------
 namespace Service;
 
+use Code;
+use Output;
 use Coral\Server\BaseServer;
 use App\Exceptions\ParamException;
 use App\Exceptions\RouteException;
+use App\Exceptions\RemoteException;
 
 class HttpServer extends BaseServer 
 {
@@ -31,52 +34,55 @@ class HttpServer extends BaseServer
 
     public function onRequest(\Swoole\Http\Request $request, \Swoole\Http\Response $response)
     {
-        \Yaf\Registry::set('SERVER', $request->server);
-        \Yaf\Registry::set('HEADER', $request->header);
-
-        $queryString = isset($request->server['path_info']) ? rawurldecode($request->server['path_info']) : '/';
-        $queryMethod = isset($request->server['request_method']) ? $request->server['request_method'] : 'GET';
-        if (false !== $pos = strpos($queryString, '?')) {
-            $queryString = substr($uri, 0, $pos);
+        if ('/favicon.ico' === $request->server['path_info'] 
+            || '/favicon.ico' === $request->server['request_uri']) {
+            return $response->end();
         }
-        $dispatcher = \Yaf\Registry::get('routeDispatcher');
-        $routeInfo  = $dispatcher->dispatch($queryMethod, $queryString);
-
-        $request = new \Yaf\Request\Http($routeInfo[1]);
-        array_walk($routeInfo[2], function ($val, $key) use ($request) {
-            $request->setParam($key, $val);
-        });
 
         try {
+            $routeInfo  = \Yaf\Registry::get('routeDispatcher')->dispatch(
+                $request->server['request_method'], $request->server['path_info']
+            );
             if (\FastRoute\Dispatcher::FOUND !== $routeInfo[0]) {
                 throw new \App\Exceptions\RouteException('API Unavailable');
             }
+
+            \Yaf\Registry::set('SERVER', $request->server);
+            \Yaf\Registry::set('HEADER', $request->header);
+            $yafRequest = new \Yaf\Request\Http($routeInfo[1]);
+            switch (strtoupper($request->server['request_method'])) {
+                case 'GET':
+                    $params = array_merge((array)$request->cookie, (array)$request->get, $routeInfo[2]);
+                    break;
+                case 'POST':
+                    $params = array_merge((array)$request->cookie, (array)$request->post, $routeInfo[2]);
+                    break;
+                default:
+                    $params = $routeInfo[2];
+                    break;
+            }
+            array_walk($params, function ($val, $key) use ($yafRequest) {
+                $yafRequest->setParam($key, $val);
+            });
             ob_start();
-            $this->application->getDispatcher()->catchException(true)->dispatch($request);
+            $this->application->getDispatcher()->dispatch($yafRequest);
             $ret = ob_get_contents();
         } catch (\Exception $e) {
-            if ($e instanceof ParamException || $e instanceof RouteException) {
-                $ret = json_encode([
-                    'code'    => $e->getCode(),
-                    'message' => $e->getMessage(),
-                    'result'  => []
-                ], JSON_UNESCAPED_UNICODE);
+            if ($e instanceof ParamException 
+                || $e instanceof RouteException 
+                || $e instanceof RemoteException) {
+                $ret = Output::json($e->getCode(), $e->getMessage());
             } else {
                 \Logger::error("code:{code}\r\nmessage:{message}\r\ntrace:{trace}", [
                     'code'    => $e->getCode(),
                     'message' => $e->getMessage(),
                     'trace'   => $e->getTrace(),
                 ]);
-                $ret = json_encode([
-                    'code'    => '500',
-                    'message' => 'System Error',
-                    'result'  => []
-                ], JSON_UNESCAPED_UNICODE);
+                $ret = Output::json(Code::SYSTEM_ERROR, 'System Error');
             }
         }
-        ob_end_clean();      
-
-        $response->header('Server', 'Somur-Server');
+        ob_end_clean();
+        $response->header('Server', 'somur');
         $response->header('Content-Type', 'application/json');
         $response->end($ret);
     }

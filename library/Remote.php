@@ -22,15 +22,24 @@ class Remote
                 'url' => $url,
                 'params' => $params,
             ]);
-            return self::$instance->exec($data);
+            $result = self::$instance->exec($data);
         } catch (\Exception $e) {
-            Logger::error("send:{send}\r\ncode:{code}\r\nmessage:{message}\r\ntrace:{trace}", [
+            Logger::error("send:{send}\r\ncode:{code}\r\nmessage:{message}\r\ntrace:{trace}\r\n", [
                 'send'    => $data,
                 'code'    => $e->getCode(),
                 'message' => $e->getMessage(),
                 'trace'   => $e->getTrace(),
             ]);
-            throw new RemoteException('Getting Remote Data Failure!');
+            throw new RemoteException('Get Remote Data Failure!');
         } 
+        if (0 !== $result['code']) {
+            Logger::error("send:{send}\r\ncode:{code}\r\nmessage:{message}\r\n", [
+                'send'    => $data,
+                'code'    => $result['code'],
+                'message' => $result['message']
+            ]);
+            throw new RemoteException('Get Remote Data Failure!');
+        }
+        return $result['data'];
     }
 }

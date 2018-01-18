@@ -46,13 +46,4 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
 
         Yaf\Registry::set('routeDispatcher', $dispatcher);
 	}
-
-    public function _initDbAdapter() 
-    {
-        $capsule  = new \Illuminate\Database\Capsule\Manager;
-        $capsule->addConnection(Config::get('database', 'database'));
-        $capsule->setAsGlobal();
-        $capsule->bootEloquent();
-        class_alias('\Illuminate\Database\Capsule\Manager', 'DB');
-    }
 }

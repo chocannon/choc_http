@@ -6,7 +6,9 @@
 // +----------------------------------------------------------------------
 namespace App\Exceptions;
 
+use Code;
+
 class ParamException extends \Exception 
 {
-    protected $code = 300;
+    protected $code = Code::INVALID_PARAM;
 }

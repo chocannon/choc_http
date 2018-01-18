@@ -6,7 +6,9 @@
 // +----------------------------------------------------------------------
 namespace App\Exceptions;
 
+use Code;
+
 class RouteException extends \Exception 
 {
-    protected $code = 404;
+    protected $code = Code::ROUTE_UNFOUND;
 }
