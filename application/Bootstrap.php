@@ -16,10 +16,12 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
 		Yaf\Registry::set('config', $config);
 	}
 
+
     public function _initLoader() 
     {
         Yaf\Loader::import(APPLICATION_PATH . "/vendor/autoload.php");
     }
+
 
     public function _initSystem(Yaf\Dispatcher $dispatcher) 
     {
@@ -28,10 +30,22 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
         error_reporting(0);
     }
 
+
 	public function _initPlugin(Yaf\Dispatcher $dispatcher)
     {
 
 	}
+
+
+    public function _initDbAdapter() 
+    {
+        $capsule  = new \Illuminate\Database\Capsule\Manager;
+        $capsule->addConnection(Config::ini('database', 'database'));
+        $capsule->setAsGlobal();
+        $capsule->bootEloquent();
+        class_alias('\Illuminate\Database\Capsule\Manager', 'DB');
+    }
+    
 
 	public function _initRoute(Yaf\Dispatcher $dispatcher)
     {

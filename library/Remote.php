@@ -17,7 +17,7 @@ class Remote
         try {
             if (null === self::$instance) {
                 self::$instance = new RpcClient();
-                self::$instance->setConfig(Config::get('server/client'));
+                self::$instance->setConfig(Config::ini('server/client'));
             }
             $data = json_encode([
                 'auth'   => [

@@ -1,11 +1,15 @@
 <?php
+use Symfony\Component\Dotenv\Dotenv;
 
 class IndexController extends Controller 
 {
     public function indexAction() 
     {
+        $dotenv = new Dotenv();
+        $dotenv->load(APPLICATION_PATH . '/.env');
+        $dbUser = getenv('DB_USERNAME');
         Logger::info(var_export($this->getRequest()->getParams(), true));
-        return $this->response(['hello world']);
+        return $this->response([$dbUser]);
     }
 
 
