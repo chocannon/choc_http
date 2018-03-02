@@ -1,4 +1,5 @@
 <?php
+use Util\Output;
 use Util\Validation;
 use Yaf\Controller_Abstract;
 
@@ -15,13 +16,14 @@ abstract class Controller extends Controller_Abstract
     
     /**
      * 响应客户端
-     * @param  array  $data 响应数组
-     * @return [type]       [description]
+     *
+     * @param mix $data 响应数组
+     * @return void
      */
-    protected function response(array $data) 
+    protected function response($data) 
     {
         $response = $this->getResponse();
-        $response->setBody(json_encode($data, JSON_UNESCAPED_UNICODE));
+        $response->setBody(Output::json($data));
         $response->response();
     }
 }

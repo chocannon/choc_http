@@ -50,13 +50,14 @@ class Http extends BaseServer
 
             \Yaf\Registry::set('SERVER', $request->server);
             \Yaf\Registry::set('HEADER', $request->header);
+            \Yaf\Registry::set('COOKIE', $request->cookie);
             $yafRequest = new \Yaf\Request\Http($routeInfo[1]);
             switch (strtoupper($request->server['request_method'])) {
                 case 'GET':
-                    $params = array_merge((array)$request->cookie, (array)$request->get, $routeInfo[2]);
+                    $params = array_merge((array)$request->get, $routeInfo[2]);
                     break;
                 case 'POST':
-                    $params = array_merge((array)$request->cookie, (array)$request->post, $routeInfo[2]);
+                    $params = array_merge((array)$request->post, $routeInfo[2]);
                     break;
                 default:
                     $params = $routeInfo[2];
