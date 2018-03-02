@@ -1,11 +1,12 @@
 <?php
 // +----------------------------------------------------------------------
-// | 自定义路由
+// | 将fastroute路由解析成yaf的sample模式
 // +----------------------------------------------------------------------
-// | Author: qh.cao
+// | Author: chocannon
 // +----------------------------------------------------------------------
+namespace Test;
 
-return [
-    ['GET', '/index/{id:\d+}[/{name}]', '/index/index'],
-    ['GET', '/api/{id:\d+}', '/api/test/score'],
-];
+class SampleModel extends \BaseModel 
+{
+    protected $table = 'app_push_plan';
+}

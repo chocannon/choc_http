@@ -66,7 +66,7 @@ class Http extends BaseServer
                 $yafRequest->setParam($key, $val);
             });
             ob_start();
-            $this->application->getDispatcher()->catchException(true)->dispatch($yafRequest);
+            $this->application->getDispatcher()->dispatch($yafRequest);
             $ret = ob_get_contents();
         } catch (\Exception $e) {
             if ($e instanceof ParamException 

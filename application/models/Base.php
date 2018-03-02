@@ -4,8 +4,8 @@
 // +----------------------------------------------------------------------
 // | Author: chocannon
 // +----------------------------------------------------------------------
-use Illuminate\Database\Eloquent\Model as OrmModel;
+use Illuminate\Database\Eloquent\Model;
 
-abstract class Model extends OrmModel {
+abstract class BaseModel extends Model {
     
 }

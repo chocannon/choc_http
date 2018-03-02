@@ -8,10 +8,10 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\Enums\\": "application/enums",
-            "App\\Repositories\\": "application/repositories",
             "Util\\": "util",
-            "App\\Exceptions\\": "application/exceptions"
+            "App\\Enums\\": "application/enums",
+            "App\\Exceptions\\": "application/exceptions",
+            "App\\Repositories\\": "application/repositories"
         }
     }
 }

@@ -19,7 +19,7 @@ class Logger
     {
         $replace = [];
         array_walk($context, function ($val, $key) use (&$replace) {
-            return $replace['{' . $key . '}'] = is_string($val) ? $val : var_export($val, true);
+            return $replace['{' . $key . '}'] = is_string($val) ? $val : print_r($val, true);
         });
         return strtr($message, $replace);
     }
