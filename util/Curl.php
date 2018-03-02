@@ -116,7 +116,7 @@ class Curl{
      * @param string $url
      * @return void
      */
-    public function post(array $data, string $url = '')
+    public function post(array $data = [], string $url = '')
     {
         $this->option['CURLOPT_POST'] = true;
         $this->option['CURLOPT_POSTFIELDS'] = $data;
