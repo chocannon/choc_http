@@ -4,7 +4,8 @@
         "nikic/fast-route": "^1.2",
         "chocannon/coral": "^1.2",
         "illuminate/database": "^5.6",
-        "symfony/dotenv": "^4.0"
+        "symfony/dotenv": "^4.0",
+        "doctrine/dbal": "^2.6"
     },
     "autoload": {
         "psr-4": {
