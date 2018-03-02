@@ -6,7 +6,7 @@
 // +----------------------------------------------------------------------
 namespace App\Exceptions;
 
-use Code;
+use Util\Code;
 
 class RemoteException extends \Exception 
 {

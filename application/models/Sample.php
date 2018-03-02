@@ -4,8 +4,6 @@
 // +----------------------------------------------------------------------
 // | Author: chocannon
 // +----------------------------------------------------------------------
-// namespace App\Models;
-
 class SampleModel extends \BaseModel 
 {
     protected $table = 'app_multi_push_plan';

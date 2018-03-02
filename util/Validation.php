@@ -39,7 +39,7 @@ class Validation extends Factory
      * @param  Yaf\Request\Http $request 请求实例
      * @return array                     结果数组
      */
-    public static function check(Yaf\Request\Http $request) 
+    public static function check(\Yaf\Request\Http $request) 
     {
         $moduleName = $request->getModuleName();
         $contrlName = $request->getControllerName();

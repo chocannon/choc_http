@@ -68,6 +68,7 @@ class Http extends BaseServer
             ob_start();
             $this->application->getDispatcher()->dispatch($yafRequest);
             $ret = ob_get_contents();
+            ob_end_clean();
         } catch (\Exception $e) {
             if ($e instanceof ParamException 
                 || $e instanceof RouteException 
@@ -82,7 +83,6 @@ class Http extends BaseServer
                 $ret = Output::json(Code::SYSTEM_ERROR, 'System Error');
             }
         }
-        ob_end_clean();
         $response->header('Server', 'somur');
         $response->header('Content-Type', 'application/json');
         $response->end($ret);

@@ -6,7 +6,7 @@
 // +----------------------------------------------------------------------
 namespace App\Exceptions;
 
-use Code;
+use Util\Code;
 
 class RouteException extends \Exception 
 {

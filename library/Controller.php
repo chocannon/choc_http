@@ -1,12 +1,15 @@
 <?php
-abstract class Controller extends Yaf\Controller_Abstract 
+use Util\Validation;
+use Yaf\Controller_Abstract;
+
+abstract class Controller extends Controller_Abstract
 {
     public function init() 
     {
-        // list($state, $msg) = Validation::check($this->getRequest());
-        // if (false === $state) {
-        //     throw new App\Exceptions\ParamException($msg);
-        // }
+        list($state, $msg) = Validation::check($this->getRequest());
+        if (false === $state) {
+            throw new App\Exceptions\ParamException($msg);
+        }
     }
 
     
