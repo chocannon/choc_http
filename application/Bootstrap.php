@@ -10,24 +10,29 @@
 // +----------------------------------------------------------------------
 class Bootstrap extends Yaf\Bootstrap_Abstract 
 {
-    public function _initConfig() 
-    {
-        $config = Yaf\Application::app()->getConfig();
-		Yaf\Registry::set('config', $config);
-	}
-
-
     public function _initLoader() 
     {
         Yaf\Loader::import(APPLICATION_PATH . "/vendor/autoload.php");
     }
 
 
+    public function _initConfig() 
+    {
+        $config = Yaf\Application::app()->getConfig();
+        Yaf\Registry::set('config', $config);
+        if (file_exists(APPLICATION_PATH . '/.env')) {
+            $dotObj = new \Symfony\Component\Dotenv\Dotenv();
+            $dotObj->load(APPLICATION_PATH . '/.env');
+            unset($dotObj);
+        }
+	}
+
+
     public function _initSystem(Yaf\Dispatcher $dispatcher) 
     {
         $dispatcher->disableView();
         $dispatcher->returnResponse(true);
-        error_reporting(0);
+        error_reporting(true == getenv('APP_DEBUG') ? E_ALL : 0);
     }
 
 
@@ -40,7 +45,8 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
     public function _initDbAdapter() 
     {
         $capsule  = new \Illuminate\Database\Capsule\Manager;
-        $capsule->addConnection(Config::ini('database', 'database'));
+        $database = \Util\Config::arr('database');
+        $capsule->addConnection($database['connections'][$database['default']]);
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
         class_alias('\Illuminate\Database\Capsule\Manager', 'DB');
@@ -57,7 +63,6 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
                 }
             }
         );
-
         Yaf\Registry::set('routeDispatcher', $dispatcher);
 	}
 }

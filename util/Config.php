@@ -4,11 +4,13 @@
 // +----------------------------------------------------------------------
 // | Author: qh.cao
 // +----------------------------------------------------------------------
+namespace Util;
+
 use RuntimeException;
 
 class Config 
 {
-    const CONF_PATH = APPLICATION_PATH . '/conf/';
+    const CONF_PATH = APPLICATION_PATH . '/config/';
 
     /**
      * 解析ini文件

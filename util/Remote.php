@@ -4,8 +4,9 @@
 // +----------------------------------------------------------------------
 // | Author: qh.cao
 // +----------------------------------------------------------------------
+namespace Util;
+
 use Yaf\Registry;
-use Service\RpcClient;
 use App\Exceptions\RemoteException;
 
 class Remote

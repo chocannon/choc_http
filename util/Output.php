@@ -4,6 +4,8 @@
 // +----------------------------------------------------------------------
 // | Author: qh.cao
 // +----------------------------------------------------------------------
+namespace Util;
+
 class Output
 {
     protected static $code    = 0;
@@ -13,7 +15,7 @@ class Output
 
     public static function json(...$args)
     {
-        $obj = new stdClass;
+        $obj = new \stdClass;
         switch (count($args)) {
             case 0:
                 $obj->code      = self::$code;

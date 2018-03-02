@@ -1,10 +1,11 @@
 <?php
 // +----------------------------------------------------------------------
-// | 将fastroute路由解析成yaf的sample模式
+// | 模型层父类
 // +----------------------------------------------------------------------
 // | Author: chocannon
 // +----------------------------------------------------------------------
-class SampleModel extends Model 
-{
-    protected $table = 'app_multi_push_plan';
+use Illuminate\Database\Eloquent\Model as OrmModel;
+
+abstract class Model extends OrmModel {
+    
 }

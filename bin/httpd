@@ -2,9 +2,12 @@
 define('APPLICATION_PATH', dirname(__DIR__));
 require_once(APPLICATION_PATH . '/vendor/autoload.php');
 
-$config  = parse_ini_file(APPLICATION_PATH . '/conf/server/http.ini', true);
-$environ = ini_get('yaf.environ');
-$setting = (empty($config) || !isset($config[$environ])) ? [] : $config[$environ];
+try {
+    $setting = \Util\Config::arr('httpd');
+    $server  = new \Util\Server\Http();
+    $server->setConfig($setting)->run();
+} catch (\Exception $e) {
+    echo "\033[31m [FAIL] \033[0m" . $e->getMessage() . PHP_EOL;
+    exit();
+}
 
-$server = new \Service\HttpServer();
-$server->setConfig($setting)->run();

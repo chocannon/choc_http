@@ -4,16 +4,17 @@
 // +----------------------------------------------------------------------
 // | Author: chocannon
 // +----------------------------------------------------------------------
-namespace Service;
+namespace Util\Server;
 
-use Code;
-use Output;
+use Util\Code;
+use Util\Output;
+use Util\Logger;
 use Coral\Server\BaseServer;
 use App\Exceptions\ParamException;
 use App\Exceptions\RouteException;
 use App\Exceptions\RemoteException;
 
-class HttpServer extends BaseServer 
+class Http extends BaseServer 
 {
     protected $application = null;
     protected $processName = 'HttpServer';
@@ -25,7 +26,7 @@ class HttpServer extends BaseServer
         if(function_exists('opcache_reset')){
             opcache_reset();
         }
-        $this->application = new \Yaf\Application(APPLICATION_PATH . "/conf/application.ini");
+        $this->application = new \Yaf\Application(APPLICATION_PATH . "/config/application.ini");
         ob_start();
         $this->application->bootstrap()->run();
         ob_end_clean();
@@ -65,7 +66,7 @@ class HttpServer extends BaseServer
                 $yafRequest->setParam($key, $val);
             });
             ob_start();
-            $this->application->getDispatcher()->dispatch($yafRequest);
+            $this->application->getDispatcher()->catchException(true)->dispatch($yafRequest);
             $ret = ob_get_contents();
         } catch (\Exception $e) {
             if ($e instanceof ParamException 
@@ -73,7 +74,7 @@ class HttpServer extends BaseServer
                 || $e instanceof RemoteException) {
                 $ret = Output::json($e->getCode(), $e->getMessage());
             } else {
-                \Logger::error("code:{code}\r\nmessage:{message}\r\ntrace:{trace}", [
+                Logger::error("code:{code}\r\nmessage:{message}\r\ntrace:{trace}", [
                     'code'    => $e->getCode(),
                     'message' => $e->getMessage(),
                     'trace'   => $e->getTrace(),

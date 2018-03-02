@@ -1,21 +1,23 @@
 <?php
-use Symfony\Component\Dotenv\Dotenv;
+use Util\Config;
+use Util\Logger;
 
 class IndexController extends Controller 
 {
     public function indexAction() 
     {
-        $dotenv = new Dotenv();
-        $dotenv->load(APPLICATION_PATH . '/.env');
-        $dbUser = getenv('DB_USERNAME');
-        Logger::info(var_export($this->getRequest()->getParams(), true));
-        return $this->response([$dbUser]);
+        $a = SampleModel::count();
+        
+        
+        $dbUser = Config::arr('database');
+        Logger::info('3333333');
+        return $this->response([$a]);
     }
 
 
     public function testAction()
-    {   
-        $ret = Remote::call('index/index/index', ['title' => '3333344444']);
-        return $this->response($ret);
+    {
+        throw new \RuntimeException('aaaaa');
+        var_dump(\Yaf\Registry::get('routeDispatcher'));
     }
 }

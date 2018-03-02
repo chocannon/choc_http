@@ -4,6 +4,8 @@
 // +----------------------------------------------------------------------
 // | Author: qh.cao
 // +----------------------------------------------------------------------
+namespace Util;
+
 use RuntimeException;
 use Illuminate\Validation\Factory;
 use Illuminate\Filesystem\Filesystem;
